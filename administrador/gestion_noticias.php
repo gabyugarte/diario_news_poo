@@ -8,12 +8,20 @@
 //Instancio la base de datos
 $datos = new Basedatos();
 $db = $datos->conexion();
-//Insertamos ùltimas noticias--------------------------------------------------------------------------------------
-if(isset($_POST['agregar'])){
-    $titulo = $_POST['txtNombre'];
-    $texto = $_POST['txtNoticia'];
-    $txtImagen = (isset($_FILES['txtImagen']['name']))?$_FILES['txtImagen']['name']:"";
-     //Para que no se sobreescriban las imagenes con nombres iguales vamos a hacer una variable fecha, para saber que por la fecha estas imágenes son distintas.
+$noticias = new Noticias($db);
+
+$txtID = (isset($_POST['txtID']))?$_POST['txtID']:"";
+$txtNombre = (isset($_POST['txtNombre']))?$_POST['txtNombre']:"";
+$txtNoticia = (isset($_POST['txtNoticia']))?$_POST['txtNoticia']:"";
+$txtImagen = (isset($_FILES['txtImagen']['name']))?$_FILES['txtImagen']['name']:"";
+$fecha = (isset($_POST['fecha']))?$_POST['fecha']:"";
+$accion = (isset($_POST['accion']))?$_POST['accion']:"";
+
+
+
+switch ($accion){
+    case 'Agregar':
+        // Para que no se sobreescriban las imagenes con nombres iguales vamos a hacer una variable fecha, para saber que por la fecha estas imágenes son distintas.
      $fecha= new DateTime();
      //Variable del nuevo archivo, si envían imagen, le ponemos el nuevo nombre que incluye el tiempo + no,mbre del archivo, para que no se mezcle con archivos del mismo nombre, de lo contrario le damos el nombre imagen.jpg
      $nombreArchivo=($txtImagen!='')?$fecha->getTimestamp(). "_". $_FILES['txtImagen']['name']:"imagen.jpg";
@@ -24,78 +32,83 @@ if(isset($_POST['agregar'])){
          move_uploaded_file($tmpImagen,"../img/".$nombreArchivo);
      }
         // instanciem l'objecte article
-        $noticia = new Noticias($db);
 
-                    // creem el nou article i redireccionem
-                    if ($noticia->crear($titulo, $nombreArchivo, $texto)) {
-                        $missatge = "Article creat correctament";
-                        header('location: gestion_noticias.php');
-                    }
-}
+// creem el nou article i redireccionem
+    if ($noticias->crear($txtNombre, $nombreArchivo, $txtNoticia)) {
+        $mensaje = "Articulo creado correctamente";
+        header('location: gestion_noticias.php');
+        }
+    break;
 
+    case 'Seleccionar':
+        //    echo 'Presionado botón Seleccionar';
+        if (true) {
+                $txtID = $_POST['txtID'];
+                $noticia = new Noticias($db);
+                //Llamo al metodo LEERUNANOTICIA y le paso el ID
+                $resultadoMod = $noticia->leerUnaNoticia($txtID);
+                $txtID = $resultadoMod->id;
+                $txtNombre = $resultadoMod->titulo;
+                $txtNoticia = $resultadoMod->texto;
+                $txtImagen = $resultadoMod->imagen;
+            }else{
+                $id = '';
+                $titulo = "";
+                $texto = "";
+                $txtImagen = "";
+            }
+    // $noticia = new Noticias($db);
+    // $resultado = $noticia->leerUnaNoticia($txtID);
 
-// Modificar noticia------------------------------------------------------------------------------------
+    break;
 
-if (isset($_POST['seleccionar'])) {
-    $txtID = $_POST['txtID'];
-    $noticia = new Noticias($db);
-    //Llamo al metodo LEERUNANOTICIA y le paso el ID
-    $resultadoMod = $noticia->leerUnaNoticia($txtID);
-
-    $titulo = $resultadoMod->titulo;
-    $texto = $resultadoMod->texto;
-    $txtImagen = $resultadoMod->imagen;
-}else{
-    $titulo = "";
-    $texto = "";
-    $txtImagen = "";
-}
-
-// Aqui me traigo los valores del formulario x medio del boton modificar
-if (isset($_POST['modificar'])) {
-    $txtID = (isset($_POST['txtID']))? $_POST['txtID']:"";
-    $titulo = (isset($_POST['txtNombre'])) ? $_POST['txtNombre'] : "";
-    $texto = (isset($_POST['txtNoticia'])) ? $_POST['txtNoticia'] : "";
-    $txtImagen = (isset($_FILES['txtImagen']['name'])) ? $_FILES['txtImagen']['name'] : "";
-
-if ($txtImagen !== '') {
+    case 'Modificar':
+if ($txtImagen != '') {
     $fecha= new DateTime();
+    //Variable del nuevo archivo, si envían imagen, le ponemos el nuevo nombre que incluye el tiempo + no,mbre del archivo, para que no se mezcle con archivos del mismo nombre, de lo contrario le damos el nombre imagen.jpg
     $nombreArchivo=($txtImagen!='') ? $fecha->getTimestamp(). "_". $_FILES['txtImagen']['name'] : "imagen.jpg";
+    //creamos una variable de imagen temporal qur será igual a files (archivo, imagen temporal)
     $tmpImagen = $_FILES['txtImagen']['tmp_name'];
-
-    move_uploaded_file($tmpImagen, "../../img/".$nombreArchivo);
-    $sentenciaSQL=$db->prepare("SELECT imagen FROM noticias WHERE id=:id");
-    $sentenciaSQL->bindParam(':id', $txtID);
-    $sentenciaSQL->execute();
-    $producto=$sentenciaSQL->fetch(PDO::FETCH_LAZY);
-
-    // if (isset($producto['imagen']) && ($producto['imagen'] != 'imagen.jpg')) {
-    //     if (file_exists("../../img/".$producto['$imagen'])) {
-    //         unlink("../../img/".$producto['$imagen']);
-    //     }
-    // }
-
-}
-    $noticia = new Noticias($db);
-    $resultadoModificar = $noticia->modificar($txtID, $titulo, $texto, $txtImagen);
-
-}
-
-// borrar noticia------------------------------------------------------------------------------------
-//Instancio la base de datos
-$datos = new Basedatos();
-$db = $datos->conexion();
-    if (isset($_POST['borrar'])) {
-    // instancio l'objecte article
-        $noticia = new Noticias($db);
-    // recullo el valor de l'id que ve del input ocult del formulari
-        $idNoticia = $_POST['txtID'];
-
-    // creem el nou article i redireccionem
-        $noticia->borrar($idNoticia);
-
+    move_uploaded_file($tmpImagen, "../img/".$nombreArchivo);
+    $query = "SELECT imagen FROM noticias WHERE id = :id ";
+    $stmt = $this->conexion->prepare($query);
+    $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
+    $stmt->execute();
+    $imagen = $stmt->fetch(PDO::FETCH_OBJ);
+    if (isset($imagen->imagen) && ($imagen->imagen != 'imagen.jpg')) {
+        if (file_exists("../../img/".$imagen->imagen)) {
+            unlink("../../img/".$imagen->imagen);
+        }
+        // Actualizamos con la imagen nueva
+        $query = "UPDATE noticias SET imagen =:imagen WHERE id = :id ";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bindParam(":imagen", $txtImagen, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
+        $stmt->execute();
+        header("Location:gestion_noticias.php");
     }
+}
+    $noticias->modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia);
+    $mensaje = "Articulo actualizado correctamente";
+    header("Location:gestion_noticias.php");
+    break;
 
+    case 'Cancelar':
+        header("Location:gestion_noticias.php");
+        break;
+   
+    case 'Borrar':
+
+   //     // instancio l'objecte article
+    // recullo el valor de l'id que ve del input ocult del formulari
+    if(isset($_POST['txtID'])) {  
+    $idNoticia = $_POST['txtID'];
+    } 
+    // creem el nou article i redireccionem
+        $noticias->borrar($idNoticia);
+    break;
+
+}
 
 
 ?>
@@ -119,21 +132,21 @@ $db = $datos->conexion();
             <form method="post" enctype="multipart/form-data">
 
                     <!-- <label for="txtID">ID:</label> -->
-                    <input type="text" hidden class="form-control" value="<?= $txtID ?>" name="txtID" id="txtID" placeholder="ID">
+                    <input type="text" hidden class="form-control" value="<?= $txtID?>" name="txtID" id="txtID" placeholder="ID">
 
                 <div class = "form-group">
                     <label for="txtNombre">Título:</label>
-                    <input type="text" required  class="form-control" value="<?= $titulo?>" name="txtNombre" id="txtNombre" placeholder="Título de la noticia">
+                    <input required type="text"  class="form-control" value="<?= $txtNombre?>" name="txtNombre" id="txtNombre" placeholder="Título de la noticia">
                 </div>
                 <div class = "form-group">
                     <label for="txtID">Noticia:</label>
                     <!-- <input type="text"  class="form-control" value="" name="txtNoticia" id="txtNoticia" placeholder="Redacta tu noticia aquí"> -->
-                    <textarea name="txtNoticia" id="txtNoticia" cols="30" rows="10" class="form-control" value = "<?= $texto?>" placeholder="Redacta tu noticia aquí"></textarea>
+                    <textarea required name="txtNoticia" id="txtNoticia" cols="30" rows="10" class="form-control" value = "" placeholder="Redacta tu noticia aquí"><?= $txtNoticia?></textarea>
                 </div>
                 <div class = "form-group">
                     <label for="txtImagen">Imágen:</label>
                     </br>
-                        <input type="file" class="form-control" value = "<?= $imagen?>" name="txtImagen" id="txtImagen">
+                        <input type="file" class="form-control" value = "<?= $txtImagen?>" name="txtImagen" id="txtImagen">
                 </div>
 
                 <div class = "form-group">
@@ -145,9 +158,9 @@ $db = $datos->conexion();
                     <input type="text"  class="form-control" value="" name="txtFuente" id="txtFuente" placeholder="URL de la fuente">
                 </div>
                 <div class="btn-group" role="group" aria-label="">
-                    <button type="submit" name="agregar" value ="Agregar" class="btn btn-success">Agregar</button>
-                    <button type="submit" name="modificar" value ="Modificar" class="btn btn-warning">Modificar</button>
-                    <button type="submit" name="cancelar" value ="Cancelar" class="btn btn-info">Cancelar</button>
+                    <button type="submit" name="accion" <?php echo ($accion == "Seleccionar")? "disabled":"";?> value ="Agregar" class="btn btn-success">Agregar</button>
+                    <button type="submit" name="accion" <?php echo ($accion !== "Seleccionar")? "disabled":"";?> value ="Modificar" class="btn btn-warning">Modificar</button>
+                    <button type="submit" name="accion" <?php echo ($accion !== "Seleccionar")? "disabled":"";?> value ="Cancelar" class="btn btn-info">Cancelar</button>
                 </div>
             </form>
         </div>
@@ -188,8 +201,8 @@ $db = $datos->conexion();
                 <td>
                     <form method="post" action="">
                         <input type="hidden" name="txtID" id="txtID" value="<?= $noticia->id ?>"/>
-                        <input type="submit" name="seleccionar" id="txtID" value="Seleccionar" class="btn btn-primary"/>
-                        <input type="submit" name="borrar" id="txtID"value="borrar" class="btn btn-danger"/>
+                        <input type="submit" name="accion" id="txtID" value="Seleccionar" class="btn btn-primary"/>
+                        <input type="submit" name="accion" id="txtID"value="Borrar" class="btn btn-danger"/>
                     </form>
                 </td>
             </tr>

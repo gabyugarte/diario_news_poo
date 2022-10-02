@@ -32,12 +32,12 @@ class Noticias {
     return $noticias;
   }
 // Aquí creo un metodo que lee solo una noticia según el id de la misma.
-public function leerUnaNoticia($id)
+public function leerUnaNoticia($txtID)
 {
   // creo la consulta y preparo la sentencia
   $query = "SELECT id, titulo, imagen, texto, fecha_creacion FROM noticias WHERE id = :id LIMIT 0,1";
   $stmt = $this->conexion->prepare($query);
-  $stmt->bindParam(":id", $id, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
+  $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
   $stmt->execute();
 
   // Aqui se preparó el resultado de la ejecución para retornar todas las noticias como objetos.
@@ -46,7 +46,7 @@ public function leerUnaNoticia($id)
 }
 
  // Aqui creo un método para ingresar o crear nueva noticia
- public function crear($titulo, $newImageName, $texto)
+ public function crear($txtNombre, $txtImagen, $txtNoticia)
  {
    // creo la consulta
    $query = "INSERT INTO  noticias (titulo, imagen, texto) VALUES (:titulo, :imagen, :texto)";
@@ -54,9 +54,9 @@ public function leerUnaNoticia($id)
    $stmt = $this->conexion->prepare($query);
    // vinculo los parámetros
 
-   $stmt->bindParam(":titulo", $titulo, PDO::PARAM_STR);
-   $stmt->bindParam(":imagen", $newImageName, PDO::PARAM_STR);
-   $stmt->bindParam(":texto", $texto, PDO::PARAM_STR);
+   $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
+   $stmt->bindParam(":imagen", $txtImagen, PDO::PARAM_STR);
+   $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
 
    //Se ejecuta la query
    if ($stmt->execute()) {
@@ -65,9 +65,9 @@ public function leerUnaNoticia($id)
  }
 
   // Creo un método para modificar la noticia 
-  public function modificar($id, $titulo, $newImageName, $texto)
+  public function modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia)
   {
-    if ($newImageName == "") {
+    if ($nombreArchivo == "") {
       // En caso no se desee modificar la imagen
       // creo la consulta
       $query = "UPDATE noticias SET titulo = :titulo, texto = :texto WHERE id = :id";
@@ -75,9 +75,9 @@ public function leerUnaNoticia($id)
       $stmt = $this->conexion->prepare($query);
 
       // Vinculamos prámetros y le decimos que el id será integer y titulo y texto serán string
-      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-      $stmt->bindParam(":titulo", $titulo, PDO::PARAM_STR);
-      $stmt->bindParam(":texto", $texto, PDO::PARAM_STR);
+      $stmt->bindParam(":id", $txtID, PDO::PARAM_INT);
+      $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
+      $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
       if ($stmt->execute()) {
         return true;
       }
@@ -88,10 +88,10 @@ public function leerUnaNoticia($id)
       // preparo la sentencia
       $stmt = $this->conexion->prepare($query);
       // vinculo los parámetros
-      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-      $stmt->bindParam(":titulo", $titulo, PDO::PARAM_STR);
-      $stmt->bindParam(":imagen", $newImageName, PDO::PARAM_STR);
-      $stmt->bindParam(":texto", $texto, PDO::PARAM_STR);
+      $stmt->bindParam(":id", $txtID, PDO::PARAM_INT);
+      $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
+      $stmt->bindParam(":imagen", $nombreArchivo, PDO::PARAM_STR);
+      $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
 
       // ejecuto
       if ($stmt->execute()) {
