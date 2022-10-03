@@ -41,3 +41,6 @@
 [L] [01-10-22 08:06:07]: Usuario [admin] cerró la sesión
 [L] [02-10-22 08:09:33]: Usuario [admin] cerró la sesión
 [L] [02-10-22 09:18:30]: Usuario [admin] cerró la sesión
+[L] [03-10-22 06:55:21]: Usuario [] cerró la sesión
+[L] [03-10-22 06:55:31]: Usuario [admin] cerró la sesión
+[L] [03-10-22 07:26:31]: Usuario [admin] cerró la sesión

@@ -35,8 +35,12 @@ switch ($accion){
 
 // creem el nou article i redireccionem
     if ($noticias->crear($txtNombre, $nombreArchivo, $txtNoticia)) {
-        $mensaje = "Articulo creado correctamente";
+        $mensaje = "Noticia creada correctamente";
         header('location: gestion_noticias.php');
+        }
+        else{
+            $mensaje = "Error al crear noticia";
+ 
         }
     break;
 
@@ -63,55 +67,55 @@ switch ($accion){
     break;
 
     case 'Modificar':
-if ($txtImagen != '') {
-    $fecha= new DateTime();
-    //Variable del nuevo archivo, si envían imagen, le ponemos el nuevo nombre que incluye el tiempo + no,mbre del archivo, para que no se mezcle con archivos del mismo nombre, de lo contrario le damos el nombre imagen.jpg
-    $nombreArchivo=($txtImagen!='') ? $fecha->getTimestamp(). "_". $_FILES['txtImagen']['name'] : "imagen.jpg";
-    //creamos una variable de imagen temporal qur será igual a files (archivo, imagen temporal)
-    $tmpImagen = $_FILES['txtImagen']['tmp_name'];
-    move_uploaded_file($tmpImagen, "../img/".$nombreArchivo);
-    $query = "SELECT imagen FROM noticias WHERE id = :id ";
-    $stmt = $this->conexion->prepare($query);
-    $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
-    $stmt->execute();
-    $imagen = $stmt->fetch(PDO::FETCH_OBJ);
-    if (isset($imagen->imagen) && ($imagen->imagen != 'imagen.jpg')) {
-        if (file_exists("../../img/".$imagen->imagen)) {
-            unlink("../../img/".$imagen->imagen);
+        if ($txtImagen != '') {
+            $fecha= new DateTime();
+            //Variable del nuevo archivo, si envían imagen, le ponemos el nuevo nombre que incluye el tiempo + no,mbre del archivo, para que no se mezcle con archivos del mismo nombre, de lo contrario le damos el nombre imagen.jpg
+            $nombreArchivo=($txtImagen!='') ? $fecha->getTimestamp(). "_". $_FILES['txtImagen']['name'] : "imagen.jpg";
+            //creamos una variable de imagen temporal qur será igual a files (archivo, imagen temporal)
+            $tmpImagen = $_FILES['txtImagen']['tmp_name'];
+            move_uploaded_file($tmpImagen, "../img/".$nombreArchivo);
+                if (isset($imagen->imagen) && ($imagen->imagen != 'imagen.jpg')) {
+                    if (file_exists("../../img/".$imagen->imagen)) {
+                        unlink("../../img/".$imagen->imagen);
+                    }
+            }
         }
-        // Actualizamos con la imagen nueva
-        $query = "UPDATE noticias SET imagen =:imagen WHERE id = :id ";
-        $stmt = $this->conexion->prepare($query);
-        $stmt->bindParam(":imagen", $txtImagen, PDO::PARAM_STR);
-        $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
-        $stmt->execute();
+        $noticias->modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia);
+        $mensaje = "Articulo actualizado correctamente";
         header("Location:gestion_noticias.php");
-    }
-}
-    $noticias->modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia);
-    $mensaje = "Articulo actualizado correctamente";
-    header("Location:gestion_noticias.php");
-    break;
-
+        break;
+        
     case 'Cancelar':
         header("Location:gestion_noticias.php");
         break;
    
     case 'Borrar':
 
-   //     // instancio l'objecte article
-    // recullo el valor de l'id que ve del input ocult del formulari
+    // Aqui uso el valor del id que figura en el formulario 
     if(isset($_POST['txtID'])) {  
     $idNoticia = $_POST['txtID'];
     } 
-    // creem el nou article i redireccionem
+
         $noticias->borrar($idNoticia);
+        // $mensaje = "Noticia borrada correctamente.";
     break;
 
 }
 
-
 ?>
+
+<!-- mensaje de error -->
+<div class="row">
+    <div class="col-sm-12">
+        <?php if (isset($mensaje)) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><?= $mensaje; ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<!-- /mensaje de error -->
 <html lang="en">
   <head>
     <title>Gestiona tus Noticias</title>
@@ -146,6 +150,14 @@ if ($txtImagen != '') {
                 <div class = "form-group">
                     <label for="txtImagen">Imágen:</label>
                     </br>
+                    <?php
+//Aquí pregunto si existe algo que sería la imagen, entonces la mostramos
+                        if($txtImagen!=""){
+                    ?>
+                        <img class= "img-thumbnail rounded" src="../img/<?php echo $txtImagen; ?>" width="50" alt="Foto de la Portada de la Noticia">
+                    <?php   
+                        }
+                    ?>
                         <input type="file" class="form-control" value = "<?= $txtImagen?>" name="txtImagen" id="txtImagen">
                 </div>
 

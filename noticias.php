@@ -1,5 +1,7 @@
 <?php 
-require_once 'template/cabecera.php'; 
+require_once 'administrador/config/Conexion.php';
+require_once 'administrador/modelos/Noticias.php';
+
 //Instancio la base de datos y conección
 $datos = new Basedatos();
 $baseDatos = $datos->conexion();
@@ -28,6 +30,8 @@ $resultado = $noticias->leer();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 </head>
+<?php require_once 'template/cabecera.php'; ?>
+
 <div class="col-md-4">
     <div class="card">
         <img class="card-img-top" src="./img/<?= $noticia->imagen ?>" alt="imagen de la noticia del día">

@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['contrasenia'];
 // validacions
     if (empty($nombre) || $nombre == '' || empty($password) || $password == '') {
-        $mensaje = "Algunos campos estan vacíos";
+        $error = "Algunos campos estan vacíos";
     } else {
         if ($usuario->acceder($nombre, $password)) {
             $_SESSION['autenticat'] = true;
@@ -27,20 +27,30 @@ if (isset($_POST['submit'])) {
             // Aquí crearé una cookie que expirará en 1 día
             setcookie("Usuario_Admin", $_SESSION['nombre'], time() + (86400 * 30), "/");
         } else {
-            $mensaje = "No se puede acceder, datos incorrectos";
-            header('Location:login_modal.php');
+            $error = "No se puede acceder, datos incorrectos";
             include('logs.php');
             $log=new Log("log.txt");
             $log->writeline("E", "Error de loggin");
             $log->close();
-
+            header('Location:login_modal.php');
         }
     }
     
 }
 
  ?>
-
+<!-- mensaje de error -->
+<div class="row">
+    <div class="col-sm-12">
+        <?php if (isset($error)) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><?= $error; ?></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<!-- /mensaje de error -->
  <!-- Modal login-------------------------------------------------------------------------------------------->
  <div class="modal fade" id="modalCompra" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

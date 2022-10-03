@@ -9,7 +9,7 @@ session_start(); //Obligatorio para trabajar con las sessiones
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="diario Cet News, programacion, HTML, CSS, PHP, MYSQL, web development"/>
+    <meta name="keywords" content="Diario News, programacion, HTML, CSS, PHP, MYSQL, web development"/>
     <meta name="author" content="Gabriela Ugarte Maco"/>
     <meta name="description" content="Diario Online en el cual podrás administrar tus noticias"/>  
     <title>Diario_News</title>

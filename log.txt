@@ -21,3 +21,10 @@
 [E] [01-10-22 06:35:09]: Error de loggin
 [E] [01-10-22 06:38:58]: Error de loggin
 [E] [01-10-22 06:39:31]: Error de loggin
+[E] [03-10-22 06:55:36]: Error de loggin
+[E] [03-10-22 07:00:33]: Error de loggin
+[E] [03-10-22 07:01:24]: Error de loggin
+[E] [03-10-22 07:02:12]: Error de loggin
+[E] [03-10-22 07:05:16]: Error de loggin
+[E] [03-10-22 07:06:55]: Error de loggin
+[E] [03-10-22 07:07:50]: Error de loggin

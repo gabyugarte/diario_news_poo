@@ -81,3 +81,7 @@
 [I] [02-10-22 09:04:21]: Todo correcto, usuario [admin] ingreso a la página 
 [I] [02-10-22 09:10:27]: Todo correcto, usuario [admin] ingreso a la página 
 [I] [02-10-22 09:19:16]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [02-10-22 16:48:08]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [03-10-22 06:13:22]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [03-10-22 06:55:28]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [03-10-22 07:09:45]: Todo correcto, usuario [admin] ingreso a la página 

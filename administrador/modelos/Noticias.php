@@ -45,6 +45,7 @@ public function leerUnaNoticia($txtID)
   return $noticia;
 }
 
+
  // Aqui creo un método para ingresar o crear nueva noticia
  public function crear($txtNombre, $txtImagen, $txtNoticia)
  {
@@ -82,7 +83,7 @@ public function leerUnaNoticia($txtID)
         return true;
       }
     } else {
-      // esto es si no desea modificar la imagen
+      // esto es si desea modificar la imagen
       // creo la consulta
       $query = "UPDATE noticias SET titulo = :titulo, imagen = :imagen, texto = :texto WHERE id = :id";
       // preparo la sentencia
