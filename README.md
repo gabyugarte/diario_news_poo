@@ -3,7 +3,8 @@ Proyecto final curso UF1844-UF1845, diario digital usando POO, crud de noticias 
 
 Para ingresar como administrador tener en cuenta lo siguiente:
 
-Clave: admin
+Clave: admin 
+
 Password: admin
 
 
