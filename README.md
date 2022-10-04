@@ -7,5 +7,8 @@ Clave: admin
 
 Password: admin
 
+*Copiar la carpeta diario_news y pegar dentro de htdocs para que no se desconfiguren los enlaces de la cabecera.
+
+
 
 

@@ -105,3 +105,5 @@
 [I] [04-10-22 09:41:57]: Todo correcto, usuario [admin] ingreso a la página 
 [I] [04-10-22 09:50:59]: Todo correcto, usuario [admin] ingreso a la página 
 [I] [04-10-22 09:54:05]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [04-10-22 10:13:11]: Todo correcto, usuario [admin] ingreso a la página 
+[I] [04-10-22 10:13:17]: Todo correcto, usuario [admin] ingreso a la página 
