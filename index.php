@@ -1,5 +1,6 @@
 <?php
 session_start(); //Obligatorio para trabajar con las sessiones
+include './login_modal.php';
 
 ?>
 <!-- Secion: corousel - bootstrap--------------------------------------------------------------------------------------- -->
@@ -21,7 +22,7 @@ session_start(); //Obligatorio para trabajar con las sessiones
 </head>
 <?php include 'template/cabecera.php'; ?>
 
-<section id="main">
+<section id="main"> 
     <!-- Para evitar la pausa del corrido de las imagenes cuando el mause esta sobre ella, agregamos data-bs-pause ="false" -->
     <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-pause=“false”>
         <div class="carousel-inner">
@@ -52,10 +53,6 @@ session_start(); //Obligatorio para trabajar con las sessiones
     </div>
 </section>
 <!-- /Secion: corousel - bootstrap--------------------------------------------------------------------------------------- -->
-
- <!-- Modal LOGIN------------------------------------------------------------------------------------------------->
- <?php include './login_modal.php'; ?>
-<!-- /Modal LOGIN------------------------------------------------------------------------------------------->
 
 <!-- Más noticias -->
 <!-- La separamos de la sección main con clase mtop-4 mt-4-->

@@ -33,7 +33,7 @@ $resultado = $noticias->leer();
             <div class="card-body">
                 <h4 class="card-title"><?= $noticia->titulo ?></h4>
                 <p class="card-description"><?= $noticia->texto ?></p>
-                <!-- <p class="card-description"> Autor: </p> -->
+                <p class="card-description"><strong>Autor:</strong> <?= $noticia->autor ?></p>
                 <p class="card-description"> Fecha de publicación: <?= $noticia->fecha_creacion ?></p>
                 <a name="" id="" class="btn btn-primary" href= "ver_mas_noticias.php?id=<?= $noticia->id ?>" role="button" target="_blanck"  >Ver más</a>
             </div>

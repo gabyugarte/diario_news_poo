@@ -15,6 +15,7 @@ $txtNombre = (isset($_POST['txtNombre']))?$_POST['txtNombre']:"";
 $txtNoticia = (isset($_POST['txtNoticia']))?$_POST['txtNoticia']:"";
 $txtImagen = (isset($_FILES['txtImagen']['name']))?$_FILES['txtImagen']['name']:"";
 $fecha = (isset($_POST['fecha']))?$_POST['fecha']:"";
+$txtAutor = (isset($_POST['txtAutor']))?$_POST['txtAutor']:"";
 $accion = (isset($_POST['accion']))?$_POST['accion']:"";
 
 
@@ -34,7 +35,7 @@ switch ($accion){
         // instanciem l'objecte article
 
 // creem el nou article i redireccionem
-    if ($noticias->crear($txtNombre, $nombreArchivo, $txtNoticia)) {
+    if ($noticias->crear($txtNombre, $nombreArchivo, $txtNoticia, $txtAutor)) {
         $mensaje = "Noticia creada correctamente";
         header('location: gestion_noticias.php');
         }
@@ -55,11 +56,13 @@ switch ($accion){
                 $txtNombre = $resultadoMod->titulo;
                 $txtNoticia = $resultadoMod->texto;
                 $txtImagen = $resultadoMod->imagen;
+                $txtAutor = $resultadoMod->autor;
             }else{
                 $id = '';
                 $titulo = "";
                 $texto = "";
                 $txtImagen = "";
+                $txtAutor = "";
             }
     // $noticia = new Noticias($db);
     // $resultado = $noticia->leerUnaNoticia($txtID);
@@ -80,7 +83,7 @@ switch ($accion){
                     }
             }
         }
-        $noticias->modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia);
+        $noticias->modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia, $txtAutor);
         $mensaje = "Articulo actualizado correctamente";
         header("Location:gestion_noticias.php");
         break;
@@ -97,25 +100,13 @@ switch ($accion){
     } 
 
         $noticias->borrar($idNoticia);
-        // $mensaje = "Noticia borrada correctamente.";
+        $mensaje = "Noticia borrada correctamente.";
     break;
 
 }
 
 ?>
 
-<!-- mensaje de error -->
-<div class="row">
-    <div class="col-sm-12">
-        <?php if (isset($mensaje)) : ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong><?= $mensaje; ?></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
-<!-- /mensaje de error -->
 <html lang="en">
   <head>
     <title>Gestiona tus Noticias</title>
@@ -158,16 +149,12 @@ switch ($accion){
                     <?php   
                         }
                     ?>
-                        <input type="file" class="form-control" value = "<?= $txtImagen?>" name="txtImagen" id="txtImagen">
+                        <input type="file" class="form-control" <?= $txtImagen?> name="txtImagen" id="txtImagen">
                 </div>
 
                 <div class = "form-group">
                     <label for="txtAutor">Autor:</label>
-                    <input type="text"  class="form-control" value="" name="txtAutor" id="txtAutor" placeholder="Nombre del autor">
-                </div>
-                <div class = "form-group">
-                    <label for="txtFuente">Fuente:</label>
-                    <input type="text"  class="form-control" value="" name="txtFuente" id="txtFuente" placeholder="URL de la fuente">
+                    <input type="text"  class="form-control" value="<?= $txtAutor?>" name="txtAutor" id="txtAutor" placeholder="Nombre del autor">
                 </div>
                 <div class="btn-group" role="group" aria-label="">
                     <button type="submit" name="accion" <?php echo ($accion == "Seleccionar")? "disabled":"";?> value ="Agregar" class="btn btn-success">Agregar</button>
@@ -208,7 +195,7 @@ switch ($accion){
                 <td>
                     <img class="img-thumbnail rounded" src="../img/<?= $noticia->imagen; ?>" width="70" alt="Foto de la Portada de la Noticia">
                 </td>
-                <td></td>
+                <td><?= $noticia->autor ?></td>
                 <td><?= $noticia->fecha_creacion ?></td>
                 <td>
                     <form method="post" action="">

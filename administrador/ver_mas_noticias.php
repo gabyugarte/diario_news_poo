@@ -52,7 +52,9 @@ $resultado = $noticias->leerUnaNoticia($id);
                     </div>
 
                     <p class="card-description"><?= $resultado->texto ?></p>
+                    <p class="card-description"><strong>Autor: </strong><?= $resultado->autor ?></p>
                     <p class="card-description"> Fecha de publicación: <?= $resultado->fecha_creacion ?></p>
+                    <a class="btn btn-primary" href="noticias_admin.php">VOLVER</a>
                 </div>
             </div>
         </div>

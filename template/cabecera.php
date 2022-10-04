@@ -4,7 +4,7 @@
 require_once './administrador/modelos/Noticias.php';
 require_once './administrador/modelos/Usuario.php';
 require_once './administrador/config/Conexion.php';
-require_once './login.php';
+require_once './login_modal.php';
 
 ?>
 

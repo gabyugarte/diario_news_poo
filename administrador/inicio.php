@@ -22,7 +22,6 @@
                 <h1 class="display-3">Bienvenido (a) <?= $_SESSION['nombre'] ?></h1>
                 <p class="lead">Vamos a administrar nuestras noticias en el sitio Web</p>
                 <hr class="my-2">
-                <p>More info</p>
                 <p class="lead">
                     <a class="btn btn-primary btn-lg" href="gestion_noticias.php" role="button">Administrar noticias</a>
                 </p>

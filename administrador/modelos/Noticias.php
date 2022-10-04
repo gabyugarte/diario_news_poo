@@ -8,6 +8,7 @@ class Noticias {
     public $imagen;
     public $texto;
     public $fecha_creacion;
+    public $autor;
     private $conexion;
     
   
@@ -21,7 +22,7 @@ class Noticias {
   public function leer()
   {
     // creo la consulta la cual nos mostrará noticias de 10 en 10, en caso tengamos muchas en la base de datos
-    $query = "SELECT id, titulo, imagen, texto, fecha_creacion FROM noticias LIMIT 10";
+    $query = "SELECT id, titulo, imagen, texto, fecha_creacion, autor FROM noticias LIMIT 10";
 
     // preparo la sentencia y se ejecuta la query
     $stmt = $this->conexion->prepare($query);
@@ -35,7 +36,7 @@ class Noticias {
 public function leerUnaNoticia($txtID)
 {
   // creo la consulta y preparo la sentencia
-  $query = "SELECT id, titulo, imagen, texto, fecha_creacion FROM noticias WHERE id = :id LIMIT 0,1";
+  $query = "SELECT id, titulo, imagen, texto, fecha_creacion, autor FROM noticias WHERE id = :id LIMIT 0,1";
   $stmt = $this->conexion->prepare($query);
   $stmt->bindParam(":id", $txtID, PDO::PARAM_INT); //vinculo los parámetros y se ejecuta la query ->execute
   $stmt->execute();
@@ -47,10 +48,10 @@ public function leerUnaNoticia($txtID)
 
 
  // Aqui creo un método para ingresar o crear nueva noticia
- public function crear($txtNombre, $txtImagen, $txtNoticia)
+ public function crear($txtNombre, $txtImagen, $txtNoticia, $txtAutor)
  {
    // creo la consulta
-   $query = "INSERT INTO  noticias (titulo, imagen, texto) VALUES (:titulo, :imagen, :texto)";
+   $query = "INSERT INTO  noticias (titulo, imagen, texto, autor) VALUES (:titulo, :imagen, :texto, :autor)";
    // preparo la sentencia
    $stmt = $this->conexion->prepare($query);
    // vinculo los parámetros
@@ -58,6 +59,7 @@ public function leerUnaNoticia($txtID)
    $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
    $stmt->bindParam(":imagen", $txtImagen, PDO::PARAM_STR);
    $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
+   $stmt->bindParam(":autor", $txtAutor, PDO::PARAM_STR);
 
    //Se ejecuta la query
    if ($stmt->execute()) {
@@ -66,12 +68,12 @@ public function leerUnaNoticia($txtID)
  }
 
   // Creo un método para modificar la noticia 
-  public function modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia)
+  public function modificar($txtID, $txtNombre, $nombreArchivo, $txtNoticia, $txtAutor)
   {
     if ($nombreArchivo == "") {
       // En caso no se desee modificar la imagen
       // creo la consulta
-      $query = "UPDATE noticias SET titulo = :titulo, texto = :texto WHERE id = :id";
+      $query = "UPDATE noticias SET titulo = :titulo, texto = :texto, autor = :autor WHERE id = :id";
       // preparo la sentencia
       $stmt = $this->conexion->prepare($query);
 
@@ -79,13 +81,14 @@ public function leerUnaNoticia($txtID)
       $stmt->bindParam(":id", $txtID, PDO::PARAM_INT);
       $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
       $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
+      $stmt->bindParam(":autor", $txtAutor, PDO::PARAM_STR);
       if ($stmt->execute()) {
         return true;
       }
     } else {
       // esto es si desea modificar la imagen
       // creo la consulta
-      $query = "UPDATE noticias SET titulo = :titulo, imagen = :imagen, texto = :texto WHERE id = :id";
+      $query = "UPDATE noticias SET titulo = :titulo, imagen = :imagen, texto = :texto, autor = :autor WHERE id = :id";
       // preparo la sentencia
       $stmt = $this->conexion->prepare($query);
       // vinculo los parámetros
@@ -93,6 +96,7 @@ public function leerUnaNoticia($txtID)
       $stmt->bindParam(":titulo", $txtNombre, PDO::PARAM_STR);
       $stmt->bindParam(":imagen", $nombreArchivo, PDO::PARAM_STR);
       $stmt->bindParam(":texto", $txtNoticia, PDO::PARAM_STR);
+      $stmt->bindParam(":autor", $txtAutor, PDO::PARAM_STR);
 
       // ejecuto
       if ($stmt->execute()) {
