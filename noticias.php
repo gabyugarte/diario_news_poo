@@ -1,4 +1,7 @@
 <?php 
+//Incluimos session_start(); para poder ingresar a la página como administrador en caso lo requiera por medio del login_modal
+session_start();
+
 require_once 'administrador/config/Conexion.php';
 require_once 'administrador/modelos/Noticias.php';
 

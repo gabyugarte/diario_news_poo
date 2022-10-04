@@ -1,3 +1,6 @@
+<?php 
+//Incluimos session_start(); para poder ingresar a la página como administrador en caso lo requiera por medio del login_modal
+session_start();?>
 
 <!DOCTYPE html>
 <html lang="en">

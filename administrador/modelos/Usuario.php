@@ -1,5 +1,5 @@
 <?php
-//Creamos la clase usuario con sus propiedades
+//Creamos la clase usuario con sus propiedades/ Parte privada / Usuario con credenciales
 class Usuario
 {
  
@@ -35,7 +35,7 @@ class Usuario
     $stmt->bindParam(":nombre", $nombre, PDO::PARAM_STR);
     $stmt->bindParam(":password", $passwordEncriptado, PDO::PARAM_STR);
 
-    // execure() parea ejecutar
+    // execute() parea ejecutar
     $stmt->execute();
     $existeUsuario = $stmt->fetch(PDO::FETCH_ASSOC);
 

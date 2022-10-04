@@ -2,7 +2,7 @@
 <?php require_once("template/cabecera.php"); ?>
 <?php require_once("config/Conexion.php"); ?>
 <?php require_once("modelos/Noticias.php"); ?>
-<!--Creamos el crud-->
+
 
 <?php
 //Instancio la base de datos
@@ -18,7 +18,7 @@ $fecha = (isset($_POST['fecha']))?$_POST['fecha']:"";
 $txtAutor = (isset($_POST['txtAutor']))?$_POST['txtAutor']:"";
 $accion = (isset($_POST['accion']))?$_POST['accion']:"";
 
-
+// ------------Creamos el crud-------------------------------------------------------------------------------
 
 switch ($accion){
     case 'Agregar':
@@ -32,16 +32,13 @@ switch ($accion){
      if($tmpImagen!=''){
          move_uploaded_file($tmpImagen,"../img/".$nombreArchivo);
      }
-        // instanciem l'objecte article
-
-// creem el nou article i redireccionem
+// creamos la nueva noticia
     if ($noticias->crear($txtNombre, $nombreArchivo, $txtNoticia, $txtAutor)) {
         $mensaje = "Noticia creada correctamente";
         header('location: gestion_noticias.php');
         }
         else{
             $mensaje = "Error al crear noticia";
- 
         }
     break;
 
@@ -64,11 +61,7 @@ switch ($accion){
                 $txtImagen = "";
                 $txtAutor = "";
             }
-    // $noticia = new Noticias($db);
-    // $resultado = $noticia->leerUnaNoticia($txtID);
-
     break;
-
     case 'Modificar':
         if ($txtImagen != '') {
             $fecha= new DateTime();
@@ -98,7 +91,6 @@ switch ($accion){
     if(isset($_POST['txtID'])) {  
     $idNoticia = $_POST['txtID'];
     } 
-
         $noticias->borrar($idNoticia);
         $mensaje = "Noticia borrada correctamente.";
     break;
@@ -180,7 +172,7 @@ switch ($accion){
         </thead>
         <tbody>
             <?php
-//Mostramos las ùltimas noticias-------------------------------------------------------
+//Mostramos las ùltimas noticias, lista de contenidos-------------------------------------------------------
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
         }
